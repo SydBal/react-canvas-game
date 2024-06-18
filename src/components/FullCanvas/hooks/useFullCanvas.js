@@ -4,16 +4,10 @@ export const useFullCanvas = () => {
   const [currentCanvas, setCurrentCanvas] = useState()
   const canvasRef = useRef()
 
-  const resetCanvas = () => {
-    setCurrentCanvas()
-    canvasRef.current.value = undefined
-  }
-
   useEffect(() => {
     const canvas = canvasRef.current
-
     if (!(canvas instanceof HTMLCanvasElement)) {
-      throw new Error('useCanvas canvasRef not set to canvas element')
+      return
     }
 
     canvas.style.display = "block"
@@ -35,13 +29,12 @@ export const useFullCanvas = () => {
     return () => {
       observer.disconnect()
     }
-  },  [canvasRef]);
+  }, [canvasRef])
 
   return {
     canvas: currentCanvas,
     canvasContext: currentCanvas?.getContext('2d'),
     canvasRef,
-    resetCanvas,
   }
 }
 

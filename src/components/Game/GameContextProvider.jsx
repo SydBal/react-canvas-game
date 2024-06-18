@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from 'react'
-import useGameCanvas from '/src/hooks/useGameCanvas'
-import useGameTime from '/src/hooks/useGameTime'
-import useEntities from '/src/hooks/useEntities'
-import GameStateContext from '/src/context/GameStateContext'
+import useFullCanvasContext from '/src/components/FullCanvas/hooks/useFullCanvasContext'
+import useGameTime from './hooks/useGameTime'
+import useEntities from './hooks/useEntities'
+import { GameContext } from './hooks/useGameContext'
 
-export const GameStateProvider =  ({ children }) => {
-  const { canvas, canvasContext, canvasRef } = useGameCanvas()
+export const GameContextProvider =  ({ children }) => {
+  const { canvas, canvasContext, canvasRef } = useFullCanvasContext()
   const { gameTime, incrementGameTime, resetGameTime } = useGameTime()
   const { entities, addEntity, addVoid, addBall, addDVDBounceDemo, removeEntity, removeEntityById, resetEntities } = useEntities()
   const [isGameInitialized, setIsGameInitialized] = useState(false);
@@ -62,15 +62,15 @@ export const GameStateProvider =  ({ children }) => {
   }, [])
 
   return (
-    <GameStateContext.Provider value={{
+    <GameContext.Provider value={{
       canvas, canvasContext, canvasRef,
       gameTime, incrementGameTime,
       entities, addEntity, addVoid, addBall, addDVDBounceDemo, removeEntity, removeEntityById,
       resetGameMemory, initializeGame,
     }}>
       {children}
-    </GameStateContext.Provider>
+    </GameContext.Provider>
   )
 }
 
-export default GameStateProvider
+export default GameContextProvider

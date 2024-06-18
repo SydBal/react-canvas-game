@@ -1,10 +1,10 @@
-import { useState, useEffect, Fragment } from "react"
-import useGameState from "/src/hooks/useGameState"
+import { useState, useEffect, Fragment } from 'react'
+import useGameContext from '/src/components/Game/hooks/useGameContext'
 import './index.css'
 
 const DebugMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { gameTime, entities, removeEntityById, initializeGame } = useGameState()
+  const { gameTime, entities, removeEntityById, initializeGame } = useGameContext()
   const [isEntitiesExpanded, setIsEntitiesExpanded] = useState(false)
   const [entitySeachValue, setEntitySeachValue] = useState('')
 

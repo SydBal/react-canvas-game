@@ -1,15 +1,15 @@
 import { useState } from 'react'
-import useGameCanvas from '/src/hooks/useGameCanvas';
 import Entity from '/src/engine/entities/Entity';
 import Void from '/src/engine/entities/Void';
 import Ball from '/src/engine/entities/Ball';
 import DVDBounceDemo from '/src/engine/entities/DVDBounceDemo';
+import useFullCanvasContext from '/src/components/FullCanvas/hooks/useFullCanvasContext';
 
 const initialEntities = { nextEntityId: 0 }
 
 export const useEntities = () => {
   const [entities, setEntities] = useState(initialEntities);
-  const { canvasContext } = useGameCanvas()
+  const { canvasContext } = useFullCanvasContext()
 
   const addEntity = (entityToAdd) => {
     setEntities(previousEntities => {

@@ -1,14 +1,13 @@
-import GameCanvasProvider from "./GameCanvasProvider";
-import GameStateProvider from "./GameStateProvider";
-import GameContent from "./GameContent";
-import "./index.css"
+import FullCanvasContextProvider from '/src/components/FullCanvas/FullCanvasContextProvider'
+import GameContextProvider from './GameContextProvider'
+import GameContent from './GameContent'
+import './index.css'
 
-const Game = () => (
-  <GameCanvasProvider>
-    <GameStateProvider>
+const Game = () =>
+  <FullCanvasContextProvider>
+    <GameContextProvider>
       <GameContent/>
-    </GameStateProvider>
-  </GameCanvasProvider>
-)
+    </GameContextProvider>
+  </FullCanvasContextProvider>
 
 export default Game
