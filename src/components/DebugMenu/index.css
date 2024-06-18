@@ -1,0 +1,23 @@
+#DebugMenu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(255 , 255, 255, 0.75);
+  color: black;
+  padding: 0 2vw;
+  max-height: 100vh;
+  overflow-y: auto;
+  resize: both;
+}
+
+#DebugMenu label {
+  display: block;
+  position: sticky;
+  top: 0;
+  background: white;
+  padding: 1rem;
+}
+
+#DebugMenu label input {
+  background: white;
+}
