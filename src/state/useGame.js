@@ -1,18 +1,32 @@
-import { useEffect, useRef } from "react"
-import useGameContext from "./hooks/useGameContext"
+import { useEffect, useRef } from 'react'
+import createStore from './createStore'
+import useFullCanvas from './useFullCanvas'
+import useGameTime from './useGameTime'
+import useEntities from './useEntities'
+import useCamera from './useCamera'
 
-const GameLoop = ({ children }) => {
+const initialIsGameInitialized = false
+const [getIsGameInitialized, setIsGameInitialized] = createStore(initialIsGameInitialized);
+
+const useGame = () => {
+  const { canvas, canvasContext } = useFullCanvas()
+  const { gameTime, incrementGameTime, resetGameTime } = useGameTime()
   const {
-    canvas, canvasContext,
-    entities, addVoid, addBall, addDVDBounceDemo,
-    gameTime, incrementGameTime,
-    isGameInitialized, setIsGameInitialized,
-    updateCamera,
-    resetGameMemory,
-    
-  } = useGameContext()
+    entities,
+    addVoid, addDVDBounceDemo, addBall,
+    resetEntities,
+  } = useEntities()
+  const { updateCamera, resetCamera } = useCamera()
+  const isGameInitialized = getIsGameInitialized()
   const animationRef = useRef()
 
+  const resetGameMemory = () => {
+    resetGameTime()
+    resetEntities()
+    resetCamera()
+    setIsGameInitialized(false)
+  }
+  
   const update = () => {
     Object.values(entities).forEach((entity) => entity.update?.())
     updateCamera()
@@ -28,40 +42,41 @@ const GameLoop = ({ children }) => {
     update()
     draw()
   }
-
+  
   const initializeGame = () => {
     resetGameMemory()
 
     addVoid()
     addDVDBounceDemo()
     addBall()
-
+  
     setIsGameInitialized(true)
     play()
   }
-
+  
   // Play loop based on game time incrementing
   useEffect(() => {
     if (isGameInitialized) {
       play()
     }
   }, [gameTime])
-
-
+  
+  
   // CanvasDidMount
   useEffect(() => {
     if (canvasContext) {
       initializeGame()
     }
   }, [canvasContext])
-
+  
   useEffect(() => {
     return () => {
       cancelAnimationFrame(animationRef.current)
     }
   }, [])
 
-  return children
+  return { initializeGame }
 }
 
-export default GameLoop
+export default useGame
+

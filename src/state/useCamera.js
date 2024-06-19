@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
-import useFullCanvasContext from '/src/components/FullCanvas/hooks/useFullCanvasContext'
+import { useEffect } from 'react'
+import createStore from './createStore';
+import useFullCanvas from '/src/state/useFullCanvas';
 
 const initialCameraCenter = { x: 0, y: 0 }
 const initialCameraCenterTarget = { x: 0, y: 0 }
@@ -13,6 +14,13 @@ const initialDebugCameraControls = {
   right: false,
 }
 
+const [getCameraCenter, setCameraCenter] = createStore(initialCameraCenter)
+const [getCameraCenterTarget, setCameraCenterTarget] = createStore(initialCameraCenterTarget)
+const [getCameraZoomScale, setCameraZoomScale] = createStore(initialZoomScale)
+const [getCameraEntityToFollow, setCameraEntityToFollow] = createStore(initialCameraEntityToFollow)
+const [getDebugCameraControlsEnabled, setDebugCameraControlsEnabled] = createStore(initialDebugCameraControlsEnabled)
+const [getDebugCameraControls, setDebugCameraControls] = createStore(initialDebugCameraControls)
+
 const keys = {
   up: 'ArrowUp',
   down: 'ArrowDown',
@@ -21,16 +29,17 @@ const keys = {
 }
 
 export const useCamera = () => {
-  const [cameraCenter, setCameraCenter] = useState(initialCameraCenter)
-  const [cameraCenterTarget, setCameraCenterTarget] = useState(initialCameraCenterTarget)
-  const [cameraZoomScale, setCameraZoomScale] = useState(initialZoomScale)
-  const [cameraEntityToFollow, setCameraEntityToFollow] = useState(initialCameraEntityToFollow)
-  const [debugCameraControlsEnabled, setDebugCameraControlsEnabled] = useState(initialDebugCameraControlsEnabled)
-  const [debugCameraControls, setDebugCameraControls] = useState(initialDebugCameraControls)
-  const { canvasContext } = useFullCanvasContext()
+  const cameraCenter = getCameraCenter()
+  const cameraCenterTarget = getCameraCenterTarget()
+  const cameraZoomScale = getCameraZoomScale()
+  const cameraEntityToFollow = getCameraEntityToFollow()
+  const debugCameraControlsEnabled = getDebugCameraControlsEnabled()
+  const debugCameraControls = getDebugCameraControls()
+  const { canvasContext } = useFullCanvas()
 
   const resetCamera = () => {
     setCameraCenter(initialCameraCenter)
+    setCameraCenterTarget(initialCameraCenterTarget)
     setCameraZoomScale(initialZoomScale)
     setCameraEntityToFollow(initialCameraEntityToFollow)
     setDebugCameraControlsEnabled(initialDebugCameraControlsEnabled)

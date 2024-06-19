@@ -1,13 +1,15 @@
-import FullCanvasContextProvider from '/src/components/FullCanvas/FullCanvasContextProvider'
-import GameContextProvider from './GameContextProvider'
-import GameContent from './GameContent'
+import DebugMenu from '/src/components/DebugMenu';
+import useFullCanvas from '/src/state/useFullCanvas';
 import './index.css'
 
-const Game = () =>
-  <FullCanvasContextProvider>
-    <GameContextProvider>
-      <GameContent/>
-    </GameContextProvider>
-  </FullCanvasContextProvider>
+const Game = () => {
+  const { canvasRef } = useFullCanvas()
+  return (
+    <div className="game-container">
+      <canvas ref={canvasRef} />
+      <DebugMenu />
+    </div>
+  )
+}
 
-export default Game
+export default Game;

@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import createStore from "./createStore"
 
 const initialGameTime = 0
+const [getGameTime, setGameTime] = createStore(initialGameTime)
 
 export const useGameTime = () => {
-  const [gameTime, setGameTime] = useState(initialGameTime)
+  const gameTime = getGameTime()
 
   const incrementGameTime = () => setGameTime(previousGameTime => previousGameTime + 1)
 

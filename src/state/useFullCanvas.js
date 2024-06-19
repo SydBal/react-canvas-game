@@ -1,7 +1,11 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
+import createStore from './createStore';
+
+const initialCanvas = undefined
+const [getCanvas, setCanvas] = createStore(initialCanvas)
 
 export const useFullCanvas = () => {
-  const [currentCanvas, setCurrentCanvas] = useState()
+  const currentCanvas = getCanvas()
   const canvasRef = useRef()
 
   useEffect(() => {
@@ -24,12 +28,14 @@ export const useFullCanvas = () => {
     const observer = new ResizeObserver(fitCanvasToParent);
     observer.observe(canvas);
 
-    setCurrentCanvas(canvas)
+    setCanvas(canvas)
   
     return () => {
       observer.disconnect()
     }
   }, [canvasRef])
+
+  
 
   return {
     canvas: currentCanvas,
