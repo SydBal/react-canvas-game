@@ -1,15 +1,9 @@
 import { useState, useEffect, Fragment } from 'react'
-import useGameTime from '/src/state/useGameTime'
-import useEntities from '/src/state/useEntities.js'
-import useGame from '/src/state/useGame'
-import useCamera from '/src/state/useCamera.js'
+import useAllStores from '/src/state'
 import './index.css'
 
 const DebugMenu = () => {
-  const { gameTime } = useGameTime()
-  const { entities, removeEntityById } = useEntities()
-  const { initializeGame } = useGame()
-  const { cameraCenter } = useCamera()
+  const { gameTime, entities, removeEntityById, initializeGame, cameraCenter } = useAllStores()
   const [isOpen, setIsOpen] = useState(false)
   const [isEntitiesExpanded, setIsEntitiesExpanded] = useState(false)
   const [entitySeachValue, setEntitySeachValue] = useState('')

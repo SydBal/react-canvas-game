@@ -1,5 +1,5 @@
 import DebugMenu from '/src/components/DebugMenu';
-import useFullCanvas from '/src/state/useFullCanvas';
+import { useFullCanvas } from '/src/state';
 import './index.css'
 
 const Game = () => {
