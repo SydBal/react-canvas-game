@@ -2,7 +2,6 @@
 import { useSyncExternalStore } from 'react'
 
 export const createStore = (initialStore) => {
-  console.log(initialStore)
   let store = initialStore
   const listeners = new Set()
 

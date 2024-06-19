@@ -1,5 +1,5 @@
-import { darkestRed, darkestBlue } from "/src/engine/colors";
 import Entity from "./Entity";
+import { darkestRed, darkestBlue } from "/src/engine/colors";
 
 class Void extends Entity {
   draw() {

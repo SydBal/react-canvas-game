@@ -1,8 +1,8 @@
 import Ball from './Ball'
 import { getRandomColor } from '/src/engine/colors'
+import { randomIntRange } from '/src/engine/math'
 import reactSvg from '/src/assets/react.svg?url'
 import viteSvg from '/src/assets/vite.svg?url'
-import { randomIntRange } from '/src/engine/math'
 
 class DVDBounceDemo extends Ball {
   constructor(props) {

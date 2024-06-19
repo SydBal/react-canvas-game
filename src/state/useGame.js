@@ -16,11 +16,12 @@ const useGame = () => {
     addVoid, addDVDBounceDemo, addBall,
     resetEntities,
   } = useEntities()
-  const { updateCamera, resetCamera } = useCamera()
+  const { updateCamera, setCameraEntityToFollow, resetCamera } = useCamera()
   const isGameInitialized = getIsGameInitialized()
   const animationRef = useRef()
 
   const resetGameMemory = () => {
+    cancelAnimationFrame(animationRef.current)
     resetGameTime()
     resetEntities()
     resetCamera()
@@ -30,7 +31,7 @@ const useGame = () => {
   const update = () => {
     Object.values(entities).forEach((entity) => entity.update?.())
     updateCamera()
-    animationRef.current = requestAnimationFrame(incrementGameTime)
+    incrementGameTime()
   }
   
   const draw = () => {
@@ -47,7 +48,8 @@ const useGame = () => {
     resetGameMemory()
 
     addVoid()
-    addDVDBounceDemo()
+    const dvd = addDVDBounceDemo()
+    setCameraEntityToFollow(dvd)
     addBall()
   
     setIsGameInitialized(true)
@@ -57,7 +59,7 @@ const useGame = () => {
   // Play loop based on game time incrementing
   useEffect(() => {
     if (isGameInitialized) {
-      play()
+      animationRef.current = requestAnimationFrame(play)
     }
   }, [gameTime])
   

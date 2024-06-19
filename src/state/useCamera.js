@@ -115,10 +115,12 @@ export const useCamera = () => {
   }, [debugCameraControlsEnabled])
 
   useEffect(() => {
-    const { x, y } = cameraCenterTarget
-    const { x: x0, y: y0 } = cameraCenter
-    canvasContext?.translate(x0 - x, y0 - y)
-    setCameraCenter({ x , y })
+    setCameraCenter(previousCenter => {
+      const { x, y } = cameraCenterTarget
+      const { x: x0, y: y0 } = previousCenter
+      canvasContext?.translate(x0 - x, y0 - y)
+      return { x , y }
+    })
   }, [cameraCenterTarget])
 
   return {

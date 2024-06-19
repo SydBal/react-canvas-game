@@ -1,6 +1,5 @@
 import createStore from './createStore';
 import useFullCanvas from '/src/state/useFullCanvas';
-import Entity from '/src/engine/entities/Entity';
 import Void from '/src/engine/entities/Void';
 import Ball from '/src/engine/entities/Ball';
 import DVDBounceDemo from '/src/engine/entities/DVDBounceDemo';
@@ -12,51 +11,29 @@ export const useEntities = () => {
   const entities = getEntities()
   const { canvasContext } = useFullCanvas()
 
-  const addEntity = (entityToAdd) => {
+  const addEntity = ({ props, EntityClass  }) => {
+    let newEntity
     setEntities(previousEntities => {
       const { nextEntityId } = previousEntities
-      entityToAdd.id = nextEntityId
-      entityToAdd.canvasContext = canvasContext
+
+      newEntity = new EntityClass({
+        id: nextEntityId, canvasContext, ...props
+      })
+
       return {
         ...previousEntities,
-        [nextEntityId]: new Entity(entityToAdd),
+        [nextEntityId]: newEntity,
         nextEntityId: nextEntityId + 1
       }
     })
+    return newEntity
   }
 
-  const addVoid = (props) => {
-    setEntities(previousEntities => {
-      const { nextEntityId } = previousEntities
-      return {
-        ...previousEntities,
-        [nextEntityId]: new Void({ ...props, id: nextEntityId, canvasContext }),
-        nextEntityId: nextEntityId + 1
-      }
-    })
-  }
+  const addVoid = (props) => addEntity({ EntityClass: Void, props })
 
-  const addBall = (props) => {
-    setEntities(previousEntities => {
-      const { nextEntityId } = previousEntities
-      return {
-        ...previousEntities,
-        [nextEntityId]: new Ball({ ...props, id: nextEntityId, canvasContext }),
-        nextEntityId: nextEntityId + 1
-      }
-    })
-  }
+  const addBall = (props) => addEntity({ EntityClass: Ball, props })
 
-  const addDVDBounceDemo = (props) => {
-    setEntities(previousEntities => {
-      const { nextEntityId } = previousEntities
-      return {
-        ...previousEntities,
-        [nextEntityId]: new DVDBounceDemo({ ...props, id: nextEntityId, canvasContext }),
-        nextEntityId: nextEntityId + 1
-      }
-    })
-  }
+  const addDVDBounceDemo = (props) => addEntity({ EntityClass: DVDBounceDemo, props })
 
   const removeEntity = (entityToRemove) => {
     // eslint-disable-next-line no-unused-vars
