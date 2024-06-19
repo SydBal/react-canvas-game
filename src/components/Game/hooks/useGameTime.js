@@ -3,7 +3,7 @@ import { useState } from 'react'
 const initialGameTime = 0
 
 export const useGameTime = () => {
-  const [gameTime, setGameTime] = useState(0)
+  const [gameTime, setGameTime] = useState(initialGameTime)
 
   const incrementGameTime = () => setGameTime(previousGameTime => previousGameTime + 1)
 

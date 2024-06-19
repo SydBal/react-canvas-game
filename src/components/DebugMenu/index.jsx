@@ -4,7 +4,7 @@ import './index.css'
 
 const DebugMenu = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const { gameTime, entities, removeEntityById, initializeGame } = useGameContext()
+  const { gameTime, entities, removeEntityById, initializeGame, cameraCenter } = useGameContext()
   const [isEntitiesExpanded, setIsEntitiesExpanded] = useState(false)
   const [entitySeachValue, setEntitySeachValue] = useState('')
 
@@ -37,9 +37,10 @@ const DebugMenu = () => {
         Restart Game
       </button>
       <p>Time: {gameTime}</p>
-      <p>Number of Entities: {Object.keys(entities).length - 1}</p>
+      <p>Camera Center: (x:{cameraCenter.x}, y:{cameraCenter.y})</p>
       <button id="EntitiesTitle" onClick={toggleIsEntitiesExpanded}>{`${isEntitiesExpanded ? 'Hide' : 'Show'} `} Entities</button>
       {isEntitiesExpanded && <>
+        <p>Number of Entities: {Object.keys(entities).length - 1}</p>
         <label htmlFor="nameSearch">
           Search Entity by name: <input id="nameSearch" value={entitySeachValue} onChange={handleEntitySearchValueChange} />
         </label>
