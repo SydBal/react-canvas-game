@@ -16,7 +16,7 @@ const initialCameraState = {
   cameraDebugControlsEnabled: true
 }
 
-const { useStore, setStore, getStore, resetStore } = createStore(initialCameraState)
+const { useStore, setStore, resetStore } = createStore(initialCameraState)
 
 export const useCamera = () => {
   const {
@@ -31,7 +31,7 @@ export const useCamera = () => {
 
   const resetCamera = () => {
     setCameraCenter({ x: 0, y: 0 })
-    // resetStore()
+    resetStore()
   }
 
   const getGameSize = () => Math.min(canvas?.width, canvas?.height)
@@ -106,7 +106,5 @@ export const useCamera = () => {
     resetCamera,
   }
 }
-
-export const getCamera = getStore
 
 export default useCamera

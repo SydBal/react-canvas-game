@@ -38,7 +38,13 @@ const useGame = () => {
   }
 
   const draw = () => {
-    canvasContext.clearRect(0,0, canvas.width, canvas.height)
+    // Clear the canvas for the next frame
+    // Not needed because we are using a void entity to backfill the canvas
+    // canvasContext.save();
+    // canvasContext.setTransform(1, 0, 0, 1, 0, 0);
+    // canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+    // canvasContext.restore();
+
     Object.values(entities).forEach((entity) => entity.draw?.())
   }
   
@@ -54,7 +60,7 @@ const useGame = () => {
     addGameOriginX()
 
     // addBall({ x: 0, y: 0, radius: 100000 })
-    const dvd = addDVDBounceDemo()
+    addDVDBounceDemo()
     // setCameraEntityToFollow(dvd)
     addBall()
     // setCameraCenterTarget({x:canvas.width/2, y:-canvas.height/2})

@@ -34,7 +34,7 @@ export const useKeyboard = () => {
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('keyup', handleKeyUp)
     }
-  })
+  }, [])
 
   return {
     keyboard,

@@ -9,7 +9,7 @@ const DebugMenu = () => {
   const { gameTime } = useGameTime()
   const { entities, removeEntityById } = useEntities()
   const { initializeGame } = useGame()
-  const { cameraCenter, cameraEntityToFollow, setCameraEntityToFollow } = useCamera()
+  const { cameraCenter, cameraEntityToFollow, setCameraEntityToFollow, setCameraCenter } = useCamera()
   const [isOpen, setIsOpen] = useState(false)
   const [isEntitiesExpanded, setIsEntitiesExpanded] = useState(false)
   const [entitySeachValue, setEntitySeachValue] = useState('')
@@ -65,7 +65,10 @@ const DebugMenu = () => {
                     Delete
                   </button>
                   <button onClick={() => {
-                    if (cameraEntityToFollow) setCameraEntityToFollow(undefined)
+                    if (cameraEntityToFollow) {
+                      setCameraEntityToFollow(undefined)
+                    }
+                    setCameraCenter(entity)
                   }}>
                     Find
                   </button>

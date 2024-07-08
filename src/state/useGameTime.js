@@ -1,19 +1,14 @@
 import createStore from "./createStore"
 
 const initialGameTime = 0
-const {
-  useStore: useGameTimeStore,
-  setStore: setGameTime,
-} = createStore(initialGameTime)
+const { useStore, setStore, resetStore } = createStore(initialGameTime)
 
 export const useGameTime = () => {
-  const gameTime = useGameTimeStore()
+  const gameTime = useStore()
 
-  const incrementGameTime = () => setGameTime(previousGameTime => previousGameTime + 1)
+  const incrementGameTime = () => setStore(previousGameTime => previousGameTime + 1)
 
-  const resetGameTime = () => setGameTime(initialGameTime)
-
-  return { gameTime, incrementGameTime, resetGameTime }
+  return { gameTime, incrementGameTime, resetGameTime: resetStore }
 }
 
 export default useGameTime
