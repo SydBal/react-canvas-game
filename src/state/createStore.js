@@ -1,27 +1,70 @@
-// https://stackoverflow.com/a/70544793
-import { useSyncExternalStore } from 'react'
+import { useSyncExternalStore, useCallback } from 'react'
 
-export const createStore = (initialStore) => {
+const shouldUpdate = (oldState, newState) => {
+  if (oldState === newState) return false
+  if (
+    [oldState, newState]
+      .map(state => typeof state === 'object' && !Array.isArray(state) && state !== null)
+      .every(validObject => validObject)
+  ) {
+    for (let key in newState) {
+      if (oldState[key] !== newState[key]) return true
+    }
+    return false
+  }
+  return false
+}
+
+const createStore = (initialStore, reducer) => {
   let store = initialStore
   const listeners = new Set()
 
+  const useStore = (selectorFn = store => store) => {
+    const subscribe = useCallback(updater => {
+      const listener = {
+        updater,
+        selectorFn,
+      }
+      listeners.add(listener)
+      return () => {
+        listeners.delete(listener)
+      }
+    }, [])
+
+    const syncedStore = useSyncExternalStore(
+      subscribe,
+      getStore,
+      getServerStore
+    )
+    return selectorFn(syncedStore)
+  }
+
+  const setStore = action => {
+    const oldStore = store
+
+    reducer
+      ? store = reducer(store, action)
+      : store = action instanceof Function ? action(store) : action
+
+    listeners.forEach(({ selectorFn, updater }) => {
+      const oldState = selectorFn(oldStore)
+      const newState = selectorFn(store)
+      if (shouldUpdate(oldState, newState)) updater(() => newState)
+    })
+  }
+
   const getStore = () => store
 
-  const dispatch = (newStore) => {
-    store = typeof newStore === 'function' ? newStore(store) : newStore
-    listeners.forEach(listener => listener(() => store))
-  }
+  const getServerStore = () => initialStore
 
-  const subscribe = (listener) => {
-    listeners.add(listener)
-    return () => listeners.delete(listener)
-  }
+  const resetStore = () => store = initialStore
 
-  const useStore = () => {
-    return useSyncExternalStore(subscribe, getStore)
+  return {
+    useStore,
+    setStore,
+    getStore,
+    resetStore
   }
-
-  return [useStore, dispatch]
 }
 
 export default createStore

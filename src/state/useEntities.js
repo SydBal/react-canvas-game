@@ -1,19 +1,21 @@
 import createStore from './createStore';
 import useFullCanvas from '/src/state/useFullCanvas';
+import Entity from '/src/engine/entities/Entity';
 import Void from '/src/engine/entities/Void';
+import GameOriginX from '/src/engine/entities/GameOriginX';
 import Ball from '/src/engine/entities/Ball';
 import DVDBounceDemo from '/src/engine/entities/DVDBounceDemo';
 
 const initialEntities = { nextEntityId: 0 }
-const [getEntities, setEntities] = createStore(initialEntities)
+const { useStore, setStore, resetStore } = createStore(initialEntities)
 
 export const useEntities = () => {
-  const entities = getEntities()
+  const entities = useStore()
   const { canvasContext } = useFullCanvas()
 
-  const addEntity = ({ props, EntityClass  }) => {
+  const addEntity = ({ props, EntityClass = Entity }) => {
     let newEntity
-    setEntities(previousEntities => {
+    setStore(previousEntities => {
       const { nextEntityId } = previousEntities
 
       newEntity = new EntityClass({
@@ -31,6 +33,8 @@ export const useEntities = () => {
 
   const addVoid = (props) => addEntity({ EntityClass: Void, props })
 
+  const addGameOriginX = (props) => addEntity({ EntityClass: GameOriginX, props })
+
   const addBall = (props) => addEntity({ EntityClass: Ball, props })
 
   const addDVDBounceDemo = (props) => addEntity({ EntityClass: DVDBounceDemo, props })
@@ -38,23 +42,22 @@ export const useEntities = () => {
   const removeEntity = (entityToRemove) => {
     // eslint-disable-next-line no-unused-vars
     const { [entityToRemove.id]: removed, ...otherEntities } = entities
-    setEntities({ ...otherEntities })
+    setStore({ ...otherEntities })
   }
   
   const removeEntityById = (id) => {
-    // eslint-disable-next-line no-unused-vars
-    const { [id]: removed, ...otherEntities } = entities
-    setEntities({ ...otherEntities })
-  }
-
-  const resetEntities = () => {
-    setEntities(initialEntities)
+    setStore(previousEntities => {
+      // eslint-disable-next-line no-unused-vars
+      const { [id]: removed, ...otherPreviousEntities } = previousEntities
+      return { ...otherPreviousEntities }
+    })
   }
 
   return {
     entities,
-    addEntity, addVoid, addBall, addDVDBounceDemo,
-    removeEntity, removeEntityById, resetEntities
+    addEntity, addVoid, addGameOriginX, addBall, addDVDBounceDemo,
+    removeEntity, removeEntityById,
+    resetEntities: resetStore,
   }
 }
 

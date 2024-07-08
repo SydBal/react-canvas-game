@@ -6,18 +6,21 @@ import useEntities from './useEntities'
 import useCamera from './useCamera'
 
 const initialIsGameInitialized = false
-const [getIsGameInitialized, setIsGameInitialized] = createStore(initialIsGameInitialized);
+const {
+  useStore: useIsGameInitialized,
+  setStore: setIsGameInitialized
+} = createStore(initialIsGameInitialized);
 
 const useGame = () => {
   const { canvas, canvasContext } = useFullCanvas()
   const { gameTime, incrementGameTime, resetGameTime } = useGameTime()
   const {
     entities,
-    addVoid, addDVDBounceDemo, addBall,
+    addVoid, addGameOriginX, addDVDBounceDemo, addBall,
     resetEntities,
   } = useEntities()
-  const { updateCamera, setCameraEntityToFollow, resetCamera } = useCamera()
-  const isGameInitialized = getIsGameInitialized()
+  const { cameraCenter, setCameraEntityToFollow, updateCamera, resetCamera } = useCamera()
+  const isGameInitialized = useIsGameInitialized()
   const animationRef = useRef()
 
   const resetGameMemory = () => {
@@ -25,15 +28,15 @@ const useGame = () => {
     resetGameTime()
     resetEntities()
     resetCamera()
-    setIsGameInitialized(false)
+    setIsGameInitialized(initialIsGameInitialized)
   }
-  
+
   const update = () => {
     Object.values(entities).forEach((entity) => entity.update?.())
     updateCamera()
     incrementGameTime()
   }
-  
+
   const draw = () => {
     canvasContext.clearRect(0,0, canvas.width, canvas.height)
     Object.values(entities).forEach((entity) => entity.draw?.())
@@ -43,27 +46,29 @@ const useGame = () => {
     update()
     draw()
   }
-  
+
   const initializeGame = () => {
     resetGameMemory()
 
     addVoid()
+    addGameOriginX()
+
+    // addBall({ x: 0, y: 0, radius: 100000 })
     const dvd = addDVDBounceDemo()
-    setCameraEntityToFollow(dvd)
+    // setCameraEntityToFollow(dvd)
     addBall()
-  
+    // setCameraCenterTarget({x:canvas.width/2, y:-canvas.height/2})
     setIsGameInitialized(true)
     play()
   }
-  
+
   // Play loop based on game time incrementing
   useEffect(() => {
     if (isGameInitialized) {
       animationRef.current = requestAnimationFrame(play)
     }
   }, [gameTime])
-  
-  
+
   // CanvasDidMount
   useEffect(() => {
     if (canvasContext) {

@@ -9,6 +9,8 @@ class Entity {
     this.name = (name || this.constructor.name) + this.id
     this.createdDate = new Date()
   }
+  update() {}
+  draw() {}
 }
 
 export default Entity

@@ -10,6 +10,11 @@
   resize: both;
 }
 
+#DebugMenu * {
+ font-family: monospace;
+ font-size: 0.7rem
+}
+
 #DebugMenu label {
   display: block;
   position: sticky;

@@ -2,10 +2,21 @@ import { useEffect, useRef } from 'react'
 import createStore from './createStore';
 
 const initialCanvas = undefined
-const [getCanvas, setCanvas] = createStore(initialCanvas)
+const initialCanvasDimensions = undefined
+
+const {
+  useStore: useCanvas,
+  setStore: setCanvas
+} = createStore(initialCanvas)
+
+const {
+  useStore: useCanvasDimensions,
+  setStore: setCanvasDimensions
+} = createStore(initialCanvasDimensions)
 
 export const useFullCanvas = () => {
-  const currentCanvas = getCanvas()
+  const currentCanvas = useCanvas()
+  const canvasDimensions = useCanvasDimensions()
   const canvasRef = useRef()
 
   useEffect(() => {
@@ -20,8 +31,9 @@ export const useFullCanvas = () => {
     canvas.style.height = "100%"
 
     const fitCanvasToParent = () => {
-      canvas.height =  canvas.parentNode.clientHeight
+      canvas.height = canvas.parentNode.clientHeight
       canvas.width = canvas.parentNode.clientWidth
+      setCanvasDimensions({ width: canvas.width, height: canvas.height })
     }
     fitCanvasToParent()
 
@@ -40,6 +52,7 @@ export const useFullCanvas = () => {
   return {
     canvas: currentCanvas,
     canvasContext: currentCanvas?.getContext('2d'),
+    canvasDimensions,
     canvasRef,
   }
 }
